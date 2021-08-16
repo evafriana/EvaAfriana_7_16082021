@@ -1,0 +1,17 @@
+{
+  "name": "evaafriana_7_03082021",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sass": "sass --watch ./sass/main.scss:./css/style.css --style compressed"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.28.0"
+  },
+  "dependencies": {
+    "bootstrap": "^5.0.2"
+  }
+}
