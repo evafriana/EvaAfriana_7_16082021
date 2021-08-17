@@ -13,6 +13,126 @@
     />
   </head>
   <body>
-    <h1>Hello</h1>
+    <div class="container">
+      <header class="d-flex flex-column">
+        <img
+          class="col-5 col-md-3 mx-auto m-4"
+          id="logo"
+          src="./images/les_petits_plats_logo.png"
+          alt="les petits plats logo"
+        />
+
+        <form action="#">
+          <div class="bg-light form__input mb-4">
+            <div class="input-group">
+              <input
+                type="search"
+                placeholder="Rechercher un ingrédient, appareil, ustensiles ou une recette"
+                aria-describedby="search"
+                class="search__input form-control border-0 p-3 bg-light"
+                spellcheck="true"
+              />
+              <div class="input-group-append align-items-center d-flex">
+                <button
+                  id="search"
+                  type="submit"
+                  class="btn btn-link text-dark"
+                >
+                  <i class="fa fa-search fs-2"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </header>
+
+      <section class="labels mobile"></section>
+
+      <nav class="my-1 d-md-flex">
+        <div class="dropdown me-3 my-3">
+          <button
+            class="btn btn-primary btn-lg py-3 dropdown-toggle text-white"
+            type="button"
+            id="dropdownMenuButton1"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Ingrédients
+          </button>
+          <div
+            class="dropdown-menu dropdown-menu-container p-2 bg-primary"
+            aria-labelledby="dropdownMenuButton1"
+          >
+            <input
+              id="search--ingredients"
+              type="search"
+              placeholder="Rechercher un ingrédient"
+              aria-describedby="search"
+              class="searchbar form-control border-0 bg-primary text-white mb-1"
+            />
+
+            <ul class="list__ingredients row row-cols-3 text-white mx-1"></ul>
+          </div>
+        </div>
+
+        <div class="dropdown me-3 my-3">
+          <button
+            class="btn btn-success btn-lg py-3 dropdown-toggle text-white"
+            type="button"
+            id="dropdownMenuButton2"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Appareil
+          </button>
+          <div
+            class="dropdown-menu dropdown-menu-container p-2 bg-success"
+            aria-labelledby="dropdownMenuButton2"
+          >
+            <input
+              id="search--appliance"
+              type="search"
+              placeholder="Rechercher un appareil"
+              aria-describedby="search"
+              class="searchbar form-control border-0 bg-success text-white mb-1"
+            />
+
+            <ul class="list__appliance row row-cols-3 text-white mx-1"></ul>
+          </div>
+        </div>
+
+        <div class="dropdown me-3 my-3">
+          <button
+            class="btn btn-danger btn-lg py-3 dropdown-toggle text-white"
+            type="button"
+            id="dropdownMenuButton3"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Ustensiles
+          </button>
+          <div
+            class="dropdown-menu dropdown-menu-container p-2 bg-danger"
+            aria-labelledby="dropdownMenuButton3"
+          >
+            <input
+              id="search--ustensils"
+              type="search"
+              placeholder="Rechercher un ustensile"
+              aria-describedby="search"
+              class="searchbar form-control border-0 bg-danger text-white mb-1"
+            />
+
+            <ul class="list__ustensils row row-cols-3 text-white mx-1"></ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <main class="my-3">
+      <section class="cards row g-5"></section>
+    </main>
+
+    <script type="module" src="js/index.js"></script>
   </body>
 </html>

@@ -1,0 +1,22 @@
+/* color */
+$primary: #3282f7;
+$success: #68d9a4;
+$danger: #ed6454;
+$white: #fff;
+$light: #e7e7e7;
+
+/* font */
+$font-family-sans-serif: "Lato", sans-serif;
+$font-description: "Roboto", sans-serif;
+$font-size-root: 12px;
+
+/* border */
+$border-radius: 5px;
+
+/* media query */
+$breakpoints: (
+  small-device: 576px,
+  tablet: 768px,
+  large-tablet: 992px,
+  desktop: 1200px,
+);

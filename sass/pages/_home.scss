@@ -1,0 +1,45 @@
+/* typography */
+h3 {
+  font-size: 18px;
+}
+
+nav {
+  @media screen and (min-width: map-get($breakpoints, small-device)) {
+    display: flex;
+    flex-wrap: wrap;
+  }
+}
+
+.label {
+  font-size: 14px;
+}
+
+.form-control {
+  font-size: 18px;
+}
+
+.btn-lg {
+  font-size: 18px;
+}
+
+.dropdown-menu-container {
+  max-width: 950px;
+  width: 80vw;
+}
+
+.list__item {
+  color: $white;
+  text-decoration: none;
+  font-size: 18px;
+  cursor: pointer;
+
+  &:hover {
+    color: $white;
+  }
+}
+
+@media screen and (max-width: map-get($breakpoints, small-device)) {
+  .mobile {
+    display: none;
+  }
+}
