@@ -14,17 +14,6 @@ export class ApplianceManager {
     this.searchEvent();
   }
 
-  buildItemsList() {
-    document.querySelector(".list__appliance").innerHTML = this.appliance
-      .slice(0, 30)
-      .map((item) => {
-        return `<li class="list__item list__item--${this.color} toto col py-1">${item}</li>`;
-      })
-      .join("");
-
-    this.itemsEvents();
-  }
-
   findAppliance() {
     const allAppliance = new Set();
 
@@ -36,8 +25,15 @@ export class ApplianceManager {
     this.buildItemsList();
   }
 
-  hasAppliance(word, recipe) {
-    return recipe.appliance.toLowerCase().includes(word.toLowerCase());
+  buildItemsList() {
+    document.querySelector(".list__appliance").innerHTML = this.appliance
+      .slice(0, 30)
+      .map((item) => {
+        return `<li class="list__item list__item--${this.color} toto col py-1">${item}</li>`;
+      })
+      .join("");
+
+    this.itemsEvents();
   }
 
   itemsEvents() {
@@ -52,15 +48,6 @@ export class ApplianceManager {
     });
   }
 
-  removeLabel(text) {
-    const result = [];
-    this.labels.forEach((label) => {
-      if (label.toLowerCase() !== text.toLowerCase()) result.push(label);
-    });
-    this.labels = result;
-    this.app.update();
-  }
-
   searchByAppliance(word) {
     this.app.recipes = this.app.recipes.reduce((accumulator, recipe) => {
       if (this.hasAppliance(word, recipe)) {
@@ -68,6 +55,19 @@ export class ApplianceManager {
       }
       return accumulator;
     }, []);
+  }
+
+  hasAppliance(word, recipe) {
+    return recipe.appliance.toLowerCase().includes(word.toLowerCase());
+  }
+
+  removeLabel(text) {
+    const result = [];
+    this.labels.forEach((label) => {
+      if (label.toLowerCase() !== text.toLowerCase()) result.push(label);
+    });
+    this.labels = result;
+    this.app.update();
   }
 
   searchEvent() {

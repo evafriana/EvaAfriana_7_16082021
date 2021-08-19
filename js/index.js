@@ -1,18 +1,20 @@
 import { recipes } from "./recipes.js";
 import { Card } from "./components/index.js";
 import { ApplianceManager } from "./components/ApplianceManager.js";
+import { UstensilsManager } from "./components/UstensilsManager.js";
 
 class App {
   constructor(recipesDB = []) {
     this.recipesDB = recipesDB;
     this.recipes = [...recipesDB];
     this.applianceManager = new ApplianceManager(this);
+    this.ustensilsManager = new UstensilsManager(this);
     this.labels = [];
 
     this.searchedAll = [];
     this.searchedUstensils = [];
     this.searchedIngredients = [];
-    this.ustensils = [];
+
     this.Ingredients = [];
 
     this.init();
@@ -40,7 +42,7 @@ class App {
 
   appendLabels() {
     this.labels = [];
-    [this.applianceManager].forEach((manager) => {
+    [this.applianceManager, this.ustensilsManager].forEach((manager) => {
       manager.labels.forEach((label) => {
         this.labels
           .push(`<div class="btn me-2 my-2 btn-${manager.color} text-white label" data-type="${manager.type}">
@@ -102,6 +104,11 @@ class App {
       this.applianceManager.searchByAppliance(word);
     });
 
+    this.ustensilsManager.labels.forEach((word) => {
+      this.ustensilsManager.searchByUstensils(word);
+    });
+
+    //
     this.searchedUstensils.forEach((word) => {
       this.searchByUstensils(word);
     });
@@ -116,6 +123,7 @@ class App {
 
     // filter items to show inside dropdowns
     this.applianceManager.findAppliance();
+    this.ustensilsManager.findUstensils();
 
     this.appendCardsRecipes();
     this.appendLabels();
@@ -128,16 +136,6 @@ class App {
       }
       return accumulator;
     }, []);
-  }
-
-  searchByUstensils(word) {
-    let recipesMatched = [];
-    this.recipes.forEach((recipe) => {
-      if (this.hasUstensils(word, recipe)) {
-        recipesMatched.push(recipe);
-      }
-    });
-    this.recipes = recipesMatched;
   }
 
   searchEverywhere(word) {
@@ -154,10 +152,6 @@ class App {
       }
     });
     this.recipes = recipesMatched;
-  }
-
-  hasUstensils(word, recipe) {
-    return recipe.ustensils.some((item) => item.toLowerCase().includes(word));
   }
 
   hasIngredient(word, recipe) {
