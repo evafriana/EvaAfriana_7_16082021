@@ -1,59 +1,28 @@
 export class ApplianceManager {
   constructor(app) {
     this.app = app;
-    this.location = document.querySelector(".list__appliance");
     this.appliance = [];
     this.labels = [];
     this.color = "success";
     this.type = "appliance";
+
     this.init();
   }
 
   init() {
     this.findAppliance();
+    this.searchEvent();
   }
 
   buildItemsList() {
-    this.location.innerHTML = this.appliance
+    document.querySelector(".list__appliance").innerHTML = this.appliance
+      .slice(0, 30)
       .map((item) => {
-        return `<li class="list__item list__item--${this.color} col py-1">${item}</li>`;
+        return `<li class="list__item list__item--${this.color} toto col py-1">${item}</li>`;
       })
       .join("");
 
     this.itemsEvents();
-  }
-
-  itemsEvents() {
-    document.querySelectorAll(`.list__item--${this.color}`).forEach((item) => {
-      item.addEventListener("click", (e) => {
-        // e.stopPropagation();
-        const items = new Set([...this.labels]);
-        items.add(e.target.outerText);
-        this.labels = Array.from(items);
-        this.app.update();
-        // this.app.appendLabels();
-      });
-    });
-  }
-
-  searchEvent() {
-    const searchInput = document.getElementById("search--appliance");
-    searchInput.addEventListener("keyup", (e) => {
-      const targetValue = e.target.value;
-      const word = targetValue?.trim()?.toLowerCase();
-
-      if (word === "") {
-        this.findAppliance();
-      } else if (this.app.isWordLongEnough(word)) {
-        const result = [];
-        this.appliance.forEach((item) => {
-          if (item.toLowerCase().includes(word)) result.push(item);
-        });
-        this.appliance = result;
-      }
-
-      this.buildItemsList();
-    });
   }
 
   findAppliance() {
@@ -65,7 +34,31 @@ export class ApplianceManager {
 
     this.appliance = Array.from(allAppliance).sort();
     this.buildItemsList();
-    this.searchEvent();
+  }
+
+  hasAppliance(word, recipe) {
+    return recipe.appliance.toLowerCase().includes(word.toLowerCase());
+  }
+
+  itemsEvents() {
+    document.querySelectorAll(`.list__item--${this.color}`).forEach((item) => {
+      item.addEventListener("click", (e) => {
+        // e.stopPropagation();
+        const items = new Set([...this.labels]);
+        items.add(e.target.outerText.trim());
+        this.labels = Array.from(items);
+        this.app.update();
+      });
+    });
+  }
+
+  removeLabel(text) {
+    const result = [];
+    this.labels.forEach((label) => {
+      if (label.toLowerCase() !== text.toLowerCase()) result.push(label);
+    });
+    this.labels = result;
+    this.app.update();
   }
 
   searchByAppliance(word) {
@@ -77,18 +70,23 @@ export class ApplianceManager {
     }, []);
   }
 
-  removeLabel(label) {
-    this.labels =
-      this.labels.filter((item) => {
-        if (label !== item.toLowerCase()) return item;
-      }) || [];
-    this.appliance =
-      this.appliance.filter((item) => {
-        if (label !== item.toLowerCase()) return item;
-      }) || [];
-  }
+  searchEvent() {
+    const searchInput = document.getElementById("search--appliance");
+    searchInput.addEventListener("keyup", (e) => {
+      const targetValue = e.target.value;
+      const word = targetValue?.trim()?.toLowerCase();
 
-  hasAppliance(word, recipe) {
-    return recipe.appliance.toLowerCase().includes(word.toLowerCase());
+      this.findAppliance();
+
+      if (this.app.isWordLongEnough(word)) {
+        const result = [];
+        this.appliance.forEach((item) => {
+          if (item.toLowerCase().includes(word)) result.push(item);
+        });
+        this.appliance = result;
+      }
+
+      this.buildItemsList();
+    });
   }
 }

@@ -6,14 +6,14 @@ class App {
   constructor(recipesDB = []) {
     this.recipesDB = recipesDB;
     this.recipes = [...recipesDB];
+    this.applianceManager = new ApplianceManager(this);
+    this.labels = [];
+
     this.searchedAll = [];
     this.searchedUstensils = [];
     this.searchedIngredients = [];
-    // this.appliance = [];
-    this.applianceManager = new ApplianceManager(this);
     this.ustensils = [];
     this.Ingredients = [];
-    this.labels = [];
 
     this.init();
   }
@@ -39,6 +39,7 @@ class App {
   }
 
   appendLabels() {
+    this.labels = [];
     [this.applianceManager].forEach((manager) => {
       manager.labels.forEach((label) => {
         this.labels
@@ -48,7 +49,7 @@ class App {
       });
     });
 
-    this.update();
+    document.querySelector(".labels").innerHTML = this.labels.join("");
     this.labelsEvents();
   }
 
@@ -56,19 +57,21 @@ class App {
     document.querySelectorAll(".fa-times-circle").forEach((label) => {
       label.addEventListener("click", (e) => {
         const element = e.target.parentElement;
-        console.log(element.dataset);
-        // this.app.addItem(element.outerText, element.dataset);
-        this.removeLabel(element.outerHTML);
-        // this.app.refilter(element.dataset);
+        this.labels = [];
+        this.removeLabel(element.outerText?.trim(), element.dataset.type);
       });
     });
   }
 
-  removeLabel(label) {
-    this.labels = this.labels.filter((item) => {
-      if (label !== item) return item;
-    });
-    this.appendLabels();
+  removeLabel(label, type) {
+    switch (type) {
+      case "appliance":
+        this.applianceManager.removeLabel(label);
+        break;
+
+      default:
+        break;
+    }
   }
 
   searchEvent() {
@@ -94,6 +97,7 @@ class App {
   update() {
     this.recipes = this.recipesDB;
 
+    // filter recipes
     this.applianceManager.labels.forEach((word) => {
       this.applianceManager.searchByAppliance(word);
     });
@@ -110,11 +114,11 @@ class App {
       this.searchEverywhere(word);
     });
 
-    // find items to show
+    // filter items to show inside dropdowns
     this.applianceManager.findAppliance();
 
     this.appendCardsRecipes();
-    document.querySelector(".labels").innerHTML = this.labels.join("");
+    this.appendLabels();
   }
 
   searchByIngredients(word) {
