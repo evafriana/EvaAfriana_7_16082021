@@ -2,6 +2,7 @@ import { recipes } from "./recipes.js";
 import { Card } from "./components/index.js";
 import { ApplianceManager } from "./components/ApplianceManager.js";
 import { UstensilsManager } from "./components/UstensilsManager.js";
+import { IngredientsManager } from "./components/IngredientsManager.js";
 
 class App {
   constructor(recipesDB = []) {
@@ -9,13 +10,10 @@ class App {
     this.recipes = [...recipesDB];
     this.applianceManager = new ApplianceManager(this);
     this.ustensilsManager = new UstensilsManager(this);
+    this.ingredientsManager = new IngredientsManager(this);
     this.labels = [];
 
-    this.searchedAll = [];
-    this.searchedUstensils = [];
-    this.searchedIngredients = [];
-
-    this.Ingredients = [];
+    this.searchedWords = [];
 
     this.init();
   }
@@ -42,7 +40,11 @@ class App {
 
   appendLabels() {
     this.labels = [];
-    [this.applianceManager, this.ustensilsManager].forEach((manager) => {
+    [
+      this.ingredientsManager,
+      this.applianceManager,
+      this.ustensilsManager,
+    ].forEach((manager) => {
       manager.labels.forEach((label) => {
         this.labels
           .push(`<div class="btn me-2 my-2 btn-${manager.color} text-white label" data-type="${manager.type}">
@@ -73,7 +75,9 @@ class App {
       case "ustensils":
         this.ustensilsManager.removeLabel(label);
         break;
-
+      case "ingredients":
+        this.ingredientsManager.removeLabel(label);
+        break;
       default:
         break;
     }
@@ -86,9 +90,11 @@ class App {
       const words = targetValue?.trim()?.toLowerCase().split(" ");
 
       if (words[0] === "") {
-        this.searchedAll = [];
+        this.searchedWords = [];
       } else {
-        this.searchedAll = words.filter((word) => this.isWordLongEnough(word));
+        this.searchedWords = words.filter((word) =>
+          this.isWordLongEnough(word)
+        );
       }
 
       this.update();
@@ -111,34 +117,21 @@ class App {
       this.ustensilsManager.searchByUstensils(word);
     });
 
-    //
-    this.searchedUstensils.forEach((word) => {
-      this.searchByUstensils(word);
+    this.ingredientsManager.labels.forEach((word) => {
+      this.ingredientsManager.searchByIngredients(word);
     });
 
-    this.searchedIngredients.forEach((word) => {
-      this.searchByIngredients(word);
-    });
-
-    this.searchedAll.forEach((word) => {
+    this.searchedWords.forEach((word) => {
       this.searchEverywhere(word);
     });
 
     // filter items to show inside dropdowns
     this.applianceManager.findAppliance();
     this.ustensilsManager.findUstensils();
+    this.ingredientsManager.findIngredients();
 
     this.appendCardsRecipes();
     this.appendLabels();
-  }
-
-  searchByIngredients(word) {
-    this.recipes = this.recipes.reduce((accumulator, recipe) => {
-      if (this.hasIngredients(word, recipe)) {
-        accumulator.push(recipe);
-      }
-      return accumulator;
-    }, []);
   }
 
   searchEverywhere(word) {
@@ -147,20 +140,14 @@ class App {
       if (
         recipe.name.toLowerCase().includes(word) ||
         recipe.description.toLowerCase().includes(word) ||
-        this.hasIngredient(word, recipe) ||
         this.applianceManager.hasAppliance(word, recipe) ||
-        this.ustensilsManager.hasUstensils(word, recipe)
+        this.ustensilsManager.hasUstensils(word, recipe) ||
+        this.ingredientsManager.hasIngredients(word, recipe)
       ) {
         recipesMatched.push(recipe);
       }
     });
     this.recipes = recipesMatched;
-  }
-
-  hasIngredient(word, recipe) {
-    return recipe.ingredients.some((item) =>
-      item.ingredient.toLowerCase().includes(word)
-    );
   }
 }
 
