@@ -73,7 +73,7 @@ class App {
         this.deleteLabel(label, this.applianceManager);
         break;
       case "ustensils":
-        this.ustensilsManager.removeLabel(label);
+        this.deleteLabel(label, this.ustensilsManager);
         break;
       case "ingredients":
         this.ingredientsManager.removeLabel(label);

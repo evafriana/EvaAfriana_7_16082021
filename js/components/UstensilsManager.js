@@ -1,10 +1,13 @@
-export class UstensilsManager {
+import { ItemsManager } from "./ItemsManager.js";
+
+export class UstensilsManager extends ItemsManager {
   constructor(app) {
-    this.app = app;
+    super(app);
     this.ustensils = [];
     this.labels = [];
     this.color = "danger";
     this.type = "ustensils";
+    this.location = document.querySelector(".list__ustensils");
 
     this.init();
   }
@@ -24,30 +27,7 @@ export class UstensilsManager {
     });
 
     this.ustensils = Array.from(allUstensils).sort();
-    this.buildItemsList();
-  }
-
-  buildItemsList() {
-    document.querySelector(".list__ustensils").innerHTML = this.ustensils
-      .slice(0, 30)
-      .map((item) => {
-        return `<li class="list__item list__item--${this.color} toto col py-1">${item}</li>`;
-      })
-      .join("");
-
-    this.itemsEvents();
-  }
-
-  itemsEvents() {
-    document.querySelectorAll(`.list__item--${this.color}`).forEach((item) => {
-      item.addEventListener("click", (e) => {
-        // e.stopPropagation();
-        const items = new Set([...this.labels]);
-        items.add(e.target.outerText.trim());
-        this.labels = Array.from(items);
-        this.app.update();
-      });
-    });
+    this.buildItemsList(this, this.ustensils);
   }
 
   searchByUstensils(word) {
@@ -66,15 +46,6 @@ export class UstensilsManager {
     );
   }
 
-  removeLabel(text) {
-    const result = [];
-    this.labels.forEach((label) => {
-      if (label.toLowerCase() !== text.toLowerCase()) result.push(label);
-    });
-    this.labels = result;
-    this.app.update();
-  }
-
   searchEvent() {
     const searchInput = document.getElementById("search--ustensils");
     searchInput.addEventListener("keyup", (e) => {
@@ -91,7 +62,7 @@ export class UstensilsManager {
         this.ustensils = result;
       }
 
-      this.buildItemsList();
+      this.buildItemsList(this, this.ustensils);
     });
   }
 }
