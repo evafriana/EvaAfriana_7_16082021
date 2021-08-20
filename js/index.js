@@ -70,6 +70,9 @@ class App {
       case "appliance":
         this.applianceManager.removeLabel(label);
         break;
+      case "ustensils":
+        this.ustensilsManager.removeLabel(label);
+        break;
 
       default:
         break;

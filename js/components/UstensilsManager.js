@@ -53,7 +53,6 @@ export class UstensilsManager {
   searchByUstensils(word) {
     let recipesMatched = [];
     this.app.recipes.forEach((recipe) => {
-      console.log(recipe);
       if (this.hasUstensils(word, recipe)) {
         recipesMatched.push(recipe);
       }
@@ -65,5 +64,14 @@ export class UstensilsManager {
     return recipe.ustensils.some((item) =>
       item.toLowerCase().includes(word.toLowerCase())
     );
+  }
+
+  removeLabel(text) {
+    const result = [];
+    this.labels.forEach((label) => {
+      if (label.toLowerCase() !== text.toLowerCase()) result.push(label);
+    });
+    this.labels = result;
+    this.app.update();
   }
 }
