@@ -11,7 +11,7 @@ export class UstensilsManager {
 
   init() {
     this.findUstensils();
-    // this.searchEvent();
+    this.searchEvent();
   }
 
   findUstensils() {
@@ -73,5 +73,25 @@ export class UstensilsManager {
     });
     this.labels = result;
     this.app.update();
+  }
+
+  searchEvent() {
+    const searchInput = document.getElementById("search--ustensils");
+    searchInput.addEventListener("keyup", (e) => {
+      const targetValue = e.target.value;
+      const word = targetValue?.trim()?.toLowerCase();
+
+      this.findUstensils();
+
+      if (this.app.isWordLongEnough(word)) {
+        const result = [];
+        this.ustensils.forEach((item) => {
+          if (item.toLowerCase().includes(word)) result.push(item);
+        });
+        this.ustensils = result;
+      }
+
+      this.buildItemsList();
+    });
   }
 }

@@ -149,7 +149,7 @@ class App {
         recipe.description.toLowerCase().includes(word) ||
         this.hasIngredient(word, recipe) ||
         this.applianceManager.hasAppliance(word, recipe) ||
-        this.hasUstensils(word, recipe)
+        this.ustensilsManager.hasUstensils(word, recipe)
       ) {
         recipesMatched.push(recipe);
       }
