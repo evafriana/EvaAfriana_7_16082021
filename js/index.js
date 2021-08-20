@@ -1,5 +1,5 @@
 import { recipes } from "./recipes.js";
-import { Card } from "./components/index.js";
+import { Card } from "./components/Card.js";
 import { ApplianceManager } from "./components/ApplianceManager.js";
 import { UstensilsManager } from "./components/UstensilsManager.js";
 import { IngredientsManager } from "./components/IngredientsManager.js";
@@ -70,7 +70,7 @@ class App {
   removeLabel(label, type) {
     switch (type) {
       case "appliance":
-        this.applianceManager.removeLabel(label);
+        this.deleteLabel(label, this.applianceManager);
         break;
       case "ustensils":
         this.ustensilsManager.removeLabel(label);
@@ -83,9 +83,18 @@ class App {
     }
   }
 
+  deleteLabel(text, obj) {
+    const result = [];
+    obj.labels.forEach((label) => {
+      if (label.toLowerCase() !== text.toLowerCase()) result.push(label);
+    });
+    obj.labels = result;
+    obj.app.update();
+  }
+
   searchEvent() {
     const searchInput = document.querySelector(".search__input");
-    searchInput.addEventListener("keyup", (e) => {
+    searchInput.addEventListener("input", (e) => {
       const targetValue = e.target.value;
       const words = targetValue?.trim()?.toLowerCase().split(" ");
 
@@ -130,6 +139,7 @@ class App {
     this.ustensilsManager.findUstensils();
     this.ingredientsManager.findIngredients();
 
+    // append elements in page
     this.appendCardsRecipes();
     this.appendLabels();
   }
