@@ -76,7 +76,7 @@ class App {
         this.deleteLabel(label, this.ustensilsManager);
         break;
       case "ingredients":
-        this.ingredientsManager.removeLabel(label);
+        this.deleteLabel(label, this.ingredientsManager);
         break;
       default:
         break;
