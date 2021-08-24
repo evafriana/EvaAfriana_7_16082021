@@ -1,12 +1,14 @@
 import { recipes } from "./recipes.js";
 import { Mapping } from "./components/Mapping.js";
 import { Card } from "./components/Card.js";
+import { ApplianceManager } from "./components/ApplianceManager.js";
 
 class App {
   constructor(recipes = []) {
     this.recipesDB = recipes;
     this.recipes = recipes;
     this.mapping = new Mapping(this);
+    this.applianceManager = new ApplianceManager(this);
 
     this.init();
   }

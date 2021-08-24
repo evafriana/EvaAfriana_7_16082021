@@ -2,17 +2,18 @@ export class Mapping {
   constructor(app) {
     this.app = app;
     this.mapping = {};
+    this.applianceMap = {};
 
     this.buildMapping();
   }
 
-  addId(item, id) {
+  addId(item, id, obj) {
     const key = this.standardize(item).toLowerCase();
     if (this.app.wordLength(key)) {
-      if (!this.mapping[key]) {
-        this.mapping[key] = new Set();
+      if (!obj[key]) {
+        obj[key] = new Set();
       }
-      this.mapping[key].add(id);
+      obj[key].add(id);
     }
   }
 
@@ -23,23 +24,37 @@ export class Mapping {
   buildMapping() {
     this.app.recipesDB.forEach((recipe) => {
       recipe.name.split(" ").forEach((item) => {
-        this.addId(item, recipe.id);
+        this.addId(item, recipe.id, this.mapping);
       });
       recipe.description.split(" ").forEach((item) => {
-        this.addId(item, recipe.id);
+        this.addId(item, recipe.id, this.mapping);
       });
-      recipe.appliance.split(" ").forEach((item) => {
-        this.addId(item, recipe.id);
+      this.applianceMapping(recipe);
+      this.ustensilsMApping(recipe);
+      this.ingredientsMApping(recipe);
+    });
+    console.log(this.applianceMap);
+  }
+
+  applianceMapping(recipe) {
+    return recipe.appliance.split(" ").forEach((item) => {
+      this.addId(item, recipe.id, this.mapping);
+      this.addId(item, recipe.id, this.applianceMap);
+    });
+  }
+
+  ustensilsMApping(recipe) {
+    return recipe.ustensils.forEach((ustensil) => {
+      ustensil.split(" ").forEach((item) => {
+        this.addId(item, recipe.id, this.mapping);
       });
-      recipe.ustensils.forEach((ustensil) => {
-        ustensil.split(" ").forEach((item) => {
-          this.addId(item, recipe.id);
-        });
-      });
-      recipe.ingredients.forEach(({ ingredient }) => {
-        ingredient.split(" ").forEach((item) => {
-          this.addId(item, recipe.id);
-        });
+    });
+  }
+
+  ingredientsMApping(recipe) {
+    recipe.ingredients.forEach(({ ingredient }) => {
+      ingredient.split(" ").forEach((item) => {
+        this.addId(item, recipe.id, this.mapping);
       });
     });
   }
