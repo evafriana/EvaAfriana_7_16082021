@@ -3,6 +3,8 @@ export class Mapping {
     this.app = app;
     this.mapping = {};
     this.applianceMap = {};
+    this.ustensilsMap = {};
+    this.ingredientsMap = {};
 
     this.buildMapping();
   }
@@ -33,7 +35,6 @@ export class Mapping {
       this.ustensilsMApping(recipe);
       this.ingredientsMApping(recipe);
     });
-    console.log(this.applianceMap);
   }
 
   applianceMapping(recipe) {
@@ -47,6 +48,7 @@ export class Mapping {
     return recipe.ustensils.forEach((ustensil) => {
       ustensil.split(" ").forEach((item) => {
         this.addId(item, recipe.id, this.mapping);
+        this.addId(item, recipe.id, this.ustensilsMap);
       });
     });
   }
@@ -55,6 +57,7 @@ export class Mapping {
     recipe.ingredients.forEach(({ ingredient }) => {
       ingredient.split(" ").forEach((item) => {
         this.addId(item, recipe.id, this.mapping);
+        this.addId(item, recipe.id, this.ingredientsMap);
       });
     });
   }
