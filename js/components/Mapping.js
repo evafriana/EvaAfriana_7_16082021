@@ -2,15 +2,14 @@ export class Mapping {
   constructor(app) {
     this.app = app;
     this.mapping = {};
-    this.applianceMap = {};
-    this.ustensilsMap = {};
+    this.appliance = new Set();
+    this.ustensils = new Set();
     this.ingredientsMap = {};
 
     this.buildMapping();
   }
 
-  addId(item, id, obj) {
-    const key = this.standardize(item).toLowerCase();
+  addId(key, id, obj) {
     if (this.app.wordLength(key)) {
       if (!obj[key]) {
         obj[key] = new Set();
@@ -20,16 +19,18 @@ export class Mapping {
   }
 
   standardize(word) {
-    return word.replace(/[&/\\#,+()$~%.'":*?<>{}0-9]/g, "");
+    return word.replace(/[&/\\#,+()$~%.'":*?<>{}0-9]/g, "").toLowerCase();
   }
 
   buildMapping() {
     this.app.recipesDB.forEach((recipe) => {
       recipe.name.split(" ").forEach((item) => {
-        this.addId(item, recipe.id, this.mapping);
+        const word = this.standardize(item);
+        this.addId(word, recipe.id, this.mapping);
       });
       recipe.description.split(" ").forEach((item) => {
-        this.addId(item, recipe.id, this.mapping);
+        const word = this.standardize(item);
+        this.addId(word, recipe.id, this.mapping);
       });
       this.applianceMapping(recipe);
       this.ustensilsMApping(recipe);
@@ -38,17 +39,21 @@ export class Mapping {
   }
 
   applianceMapping(recipe) {
-    return recipe.appliance.split(" ").forEach((item) => {
-      this.addId(item, recipe.id, this.mapping);
-      this.addId(item, recipe.id, this.applianceMap);
+    this.appliance.add(this.standardize(recipe.appliance));
+
+    recipe.appliance.split(" ").forEach((item) => {
+      const word = this.standardize(item);
+      this.addId(word, recipe.id, this.mapping);
     });
   }
 
   ustensilsMApping(recipe) {
-    return recipe.ustensils.forEach((ustensil) => {
+    recipe.ustensils.forEach((ustensil) => {
+      this.ustensils.add(this.standardize(ustensil));
+
       ustensil.split(" ").forEach((item) => {
-        this.addId(item, recipe.id, this.mapping);
-        this.addId(item, recipe.id, this.ustensilsMap);
+        const word = this.standardize(item);
+        this.addId(word, recipe.id, this.mapping);
       });
     });
   }
@@ -56,8 +61,9 @@ export class Mapping {
   ingredientsMApping(recipe) {
     recipe.ingredients.forEach(({ ingredient }) => {
       ingredient.split(" ").forEach((item) => {
-        this.addId(item, recipe.id, this.mapping);
-        this.addId(item, recipe.id, this.ingredientsMap);
+        const word = this.standardize(item);
+        this.addId(word, recipe.id, this.mapping);
+        this.addId(word, recipe.id, this.ingredientsMap);
       });
     });
   }

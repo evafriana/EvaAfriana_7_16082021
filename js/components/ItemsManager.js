@@ -11,6 +11,20 @@ export class ItemsManager {
       })
       .join("");
 
-    // this.itemsEvents(obj);
+    this.itemsEvents(obj);
+  }
+
+  itemsEvents(obj) {
+    document.querySelectorAll(`.list__item--${obj.color}`).forEach((item) => {
+      item.addEventListener("click", (e) => {
+        // e.stopPropagation();
+        console.log("toto");
+        const items = new Set([...obj.labels]);
+        items.add(e.target.outerText.trim());
+        obj.labels = Array.from(items);
+        // this.app.appendLabels();
+        this.app.update();
+      });
+    });
   }
 }

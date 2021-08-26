@@ -2,6 +2,8 @@ import { recipes } from "./recipes.js";
 import { Mapping } from "./components/Mapping.js";
 import { Card } from "./components/Card.js";
 import { ApplianceManager } from "./components/ApplianceManager.js";
+import { UstensilsManager } from "./components/UstensilsManager.js";
+import { IngredientsManager } from "./components/IngredientsManager.js";
 
 class App {
   constructor(recipes = []) {
@@ -9,13 +11,17 @@ class App {
     this.recipes = recipes;
     this.mapping = new Mapping(this);
     this.applianceManager = new ApplianceManager(this);
+    this.ustensilsManager = new UstensilsManager(this);
+    this.ingredientsManager = new IngredientsManager(this);
+
+    this.labels = [];
 
     this.init();
   }
 
   init() {
-    this.searchEvent();
     this.appendCardsRecipes();
+    this.searchEvent();
   }
 
   appendCardsRecipes() {
@@ -37,17 +43,6 @@ class App {
     return word.length > 2;
   }
 
-  searchEvent() {
-    const searchInput = document.querySelector(".search__input");
-    searchInput.addEventListener("input", (e) => {
-      const targetValue = e.target.value;
-      const words = targetValue?.trim()?.toLowerCase().split(" ");
-
-      const searchedWords = words.filter((word) => this.wordLength(word));
-      this.searchByMapping(searchedWords);
-    });
-  }
-
   findIds(item) {
     const word = new RegExp(item);
     const obj = this.mapping.mapping;
@@ -59,6 +54,17 @@ class App {
       }
     }
     return Array.from(keys);
+  }
+
+  searchEvent() {
+    const searchInput = document.querySelector(".search__input");
+    searchInput.addEventListener("input", (e) => {
+      const targetValue = e.target.value;
+      const words = targetValue?.trim()?.toLowerCase().split(" ");
+
+      const searchedWords = words.filter((word) => this.wordLength(word));
+      this.searchByMapping(searchedWords);
+    });
   }
 
   searchByMapping(words) {
@@ -96,6 +102,66 @@ class App {
     }, []);
 
     this.appendCardsRecipes();
+  }
+
+  appendLabels() {
+    this.labels = [];
+    [
+      // this.ingredientsManager,
+      this.applianceManager,
+      this.ustensilsManager,
+    ].forEach((manager) => {
+      manager.labels.forEach((label) => {
+        this.labels
+          .push(`<div class="btn me-2 my-2 btn-${manager.color} text-white label" data-type="${manager.type}">
+                      ${label} <i class="ms-2 far fa-times-circle"></i>
+                    </div>`);
+      });
+    });
+
+    document.querySelector(".labels").innerHTML = this.labels.join("");
+    this.labelsEvents();
+  }
+
+  labelsEvents() {
+    document.querySelectorAll(".fa-times-circle").forEach((label) => {
+      label.addEventListener("click", (e) => {
+        const element = e.target.parentElement;
+        this.labels = [];
+        this.removeLabel(element.outerText?.trim(), element.dataset.type);
+      });
+    });
+  }
+
+  removeLabel(label, type) {
+    switch (type) {
+      case "appliance":
+        this.deleteLabel(label, this.applianceManager);
+        break;
+      case "ustensils":
+        this.deleteLabel(label, this.ustensilsManager);
+        break;
+      // case "ingredients":
+      //   this.deleteLabel(label, this.ingredientsManager);
+      //   break;
+      default:
+        break;
+    }
+  }
+
+  deleteLabel(text, obj) {
+    const result = [];
+    obj.labels.forEach((label) => {
+      if (label.toLowerCase() !== text.toLowerCase()) result.push(label);
+    });
+    obj.labels = result;
+    obj.app.update();
+  }
+
+  update() {
+    this.appendLabels();
+    this.searchByMapping([...this.applianceManager.labels]);
+    this.searchByMapping([...this.ustensilsManager.labels]);
   }
 }
 

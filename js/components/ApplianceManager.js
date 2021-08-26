@@ -3,8 +3,7 @@ import { ItemsManager } from "./ItemsManager.js";
 export class ApplianceManager extends ItemsManager {
   constructor(app) {
     super(app);
-    this.appliance = this.app.mapping.applianceMap;
-    this.applianceArray = Object.keys(this.appliance).sort();
+    this.appliance = Array.from(this.app.mapping.appliance).sort();
     this.labels = [];
     this.color = "success";
     this.type = "appliance";
@@ -14,29 +13,28 @@ export class ApplianceManager extends ItemsManager {
   }
 
   init() {
-    this.appendAppliance();
+    this.appendAppliance(this.appliance);
     this.searchEvent();
   }
 
-  appendAppliance() {
-    this.buildItemsList(this, this.applianceArray);
+  appendAppliance(items) {
+    this.buildItemsList(this, items);
   }
 
   searchEvent() {
     const searchInput = document.getElementById("search--appliance");
-    searchInput.addEventListener("keyup", (e) => {
+    searchInput.addEventListener("input", (e) => {
       const targetValue = e.target.value;
       const word = targetValue?.trim()?.toLowerCase();
 
       if (this.app.wordLength(word)) {
-        const result = [];
-        this.applianceArray.forEach((item) => {
-          if (item.toLowerCase().includes(word)) result.push(item);
+        const items = this.appliance.filter((item) => {
+          return item.match(new RegExp(word));
         });
-        this.applianceArray = result;
+        this.appendAppliance(items);
+      } else {
+        this.appendAppliance(this.appliance);
       }
-
-      this.appendAppliance();
     });
   }
 }
