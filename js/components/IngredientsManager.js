@@ -3,10 +3,9 @@ import { ItemsManager } from "./ItemsManager.js";
 export class IngredientsManager extends ItemsManager {
   constructor(app) {
     super(app);
-    this.ingredients = this.app.mapping.ingredientsMap;
-    this.ingredientsArray = [];
+    this.ingredients = Array.from(this.app.mapping.ingredients).sort();
     this.labels = [];
-    this.color = "success";
+    this.color = "primary";
     this.type = "ingredients";
     this.location = document.querySelector(".list__ingredients");
 
@@ -14,11 +13,28 @@ export class IngredientsManager extends ItemsManager {
   }
 
   init() {
-    this.appendIngredients();
+    this.appendIngredients(this.ingredients);
+    this.searchEvent();
   }
 
-  appendIngredients() {
-    this.ingredientsArray = Array.from(Object.keys(this.ingredients)).sort();
-    // this.buildItemsList(this, this.ingredientsArray);
+  appendIngredients(items) {
+    this.buildItemsList(this, items);
+  }
+
+  searchEvent() {
+    const searchInput = document.getElementById("search--ingredients");
+    searchInput.addEventListener("input", (e) => {
+      const targetValue = e.target.value;
+      const word = targetValue?.trim()?.toLowerCase();
+
+      if (this.app.wordLength(word)) {
+        const items = this.ingredients.filter((item) => {
+          return item.match(new RegExp(word));
+        });
+        this.appendIngredients(items);
+      } else {
+        this.appendIngredients(this.ingredients);
+      }
+    });
   }
 }

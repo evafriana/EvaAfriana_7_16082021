@@ -107,7 +107,7 @@ class App {
   appendLabels() {
     this.labels = [];
     [
-      // this.ingredientsManager,
+      this.ingredientsManager,
       this.applianceManager,
       this.ustensilsManager,
     ].forEach((manager) => {
@@ -141,9 +141,9 @@ class App {
       case "ustensils":
         this.deleteLabel(label, this.ustensilsManager);
         break;
-      // case "ingredients":
-      //   this.deleteLabel(label, this.ingredientsManager);
-      //   break;
+      case "ingredients":
+        this.deleteLabel(label, this.ingredientsManager);
+        break;
       default:
         break;
     }
@@ -162,6 +162,7 @@ class App {
     this.appendLabels();
     this.searchByMapping([...this.applianceManager.labels]);
     this.searchByMapping([...this.ustensilsManager.labels]);
+    this.searchByMapping([...this.ingredientsManager.labels]);
   }
 }
 

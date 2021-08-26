@@ -4,7 +4,7 @@ export class Mapping {
     this.mapping = {};
     this.appliance = new Set();
     this.ustensils = new Set();
-    this.ingredientsMap = {};
+    this.ingredients = new Set();
 
     this.buildMapping();
   }
@@ -60,10 +60,11 @@ export class Mapping {
 
   ingredientsMApping(recipe) {
     recipe.ingredients.forEach(({ ingredient }) => {
+      this.ingredients.add(this.standardize(ingredient));
+
       ingredient.split(" ").forEach((item) => {
         const word = this.standardize(item);
         this.addId(word, recipe.id, this.mapping);
-        this.addId(word, recipe.id, this.ingredientsMap);
       });
     });
   }
