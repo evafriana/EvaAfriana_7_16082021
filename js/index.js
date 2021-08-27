@@ -6,6 +6,7 @@ import { UstensilsManager } from "./components/UstensilsManager.js";
 import { IngredientsManager } from "./components/IngredientsManager.js";
 
 class App {
+  // to build application
   constructor(recipes = []) {
     this.recipesDB = recipes;
     this.recipes = recipes;
@@ -19,11 +20,13 @@ class App {
     this.init();
   }
 
+  // constructor call
   init() {
     this.appendCardsRecipes();
     this.searchEvent();
   }
 
+  // append recipes to the cards
   appendCardsRecipes() {
     const cards = document.querySelector(".cards");
     cards.innerHTML = "";
@@ -39,10 +42,12 @@ class App {
     }
   }
 
+  // to check the number of letters entered is more than two characters
   wordLength(word) {
     return word.length > 2;
   }
 
+  // to find id of each word from recipes
   findIds(item) {
     const word = new RegExp(item);
     const obj = this.mapping.mapping;
@@ -56,6 +61,7 @@ class App {
     return Array.from(keys);
   }
 
+  // input searched words
   searchEvent() {
     const searchInput = document.querySelector(".search__input");
     searchInput.addEventListener("input", (e) => {
@@ -67,6 +73,7 @@ class App {
     });
   }
 
+  // search through mapping
   searchByMapping(words) {
     let result = [];
     let turn = 0;
@@ -92,6 +99,7 @@ class App {
     }
   }
 
+  // display recipes
   recipesToDisplay(ids) {
     this.recipes = this.recipesDB.reduce((acc, recipe) => {
       if (ids.includes(recipe.id)) {
@@ -104,6 +112,7 @@ class App {
     this.appendCardsRecipes();
   }
 
+  // append labels
   appendLabels() {
     this.labels = [];
     [
@@ -123,6 +132,7 @@ class App {
     this.labelsEvents();
   }
 
+  // click label to delete
   labelsEvents() {
     document.querySelectorAll(".fa-times-circle").forEach((label) => {
       label.addEventListener("click", (e) => {
@@ -133,6 +143,7 @@ class App {
     });
   }
 
+  // delete label by type
   removeLabel(label, type) {
     switch (type) {
       case "appliance":
@@ -149,6 +160,7 @@ class App {
     }
   }
 
+  // delete label
   deleteLabel(text, obj) {
     const result = [];
     obj.labels.forEach((label) => {
@@ -158,6 +170,7 @@ class App {
     obj.app.update();
   }
 
+  // update page by label and mapping for recipes
   update() {
     this.appendLabels();
     this.searchByMapping([...this.applianceManager.labels]);

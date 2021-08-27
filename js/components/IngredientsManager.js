@@ -1,6 +1,8 @@
 import { ItemsManager } from "./ItemsManager.js";
 
+// to manage the functionality of ingredients
 export class IngredientsManager extends ItemsManager {
+  // to build ingredients
   constructor(app) {
     super(app);
     this.ingredients = Array.from(this.app.mapping.ingredients).sort();
@@ -11,16 +13,18 @@ export class IngredientsManager extends ItemsManager {
 
     this.init();
   }
-
+  // constructor call
   init() {
     this.appendIngredients(this.ingredients);
     this.searchEvent();
   }
 
+  // append ingredients
   appendIngredients(items) {
     this.buildItemsList(this, items);
   }
 
+  // input searched words
   searchEvent() {
     const searchInput = document.getElementById("search--ingredients");
     searchInput.addEventListener("input", (e) => {

@@ -1,5 +1,6 @@
 import { Ingredient } from "./Ingredient.js";
 
+//append card recipes
 export const Card = (recipe) => {
   const { name, time, description, ingredients } = recipe;
   const ingredientsList = ingredients.map((ingredient) => {

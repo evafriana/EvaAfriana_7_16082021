@@ -1,4 +1,5 @@
 export class Mapping {
+  // to build map
   constructor(app) {
     this.app = app;
     this.mapping = {};
@@ -9,6 +10,7 @@ export class Mapping {
     this.buildMapping();
   }
 
+  // add id of recipe to each word
   addId(key, id, obj) {
     if (this.app.wordLength(key)) {
       if (!obj[key]) {
@@ -18,10 +20,12 @@ export class Mapping {
     }
   }
 
+  //remove special caracter
   standardize(word) {
     return word.replace(/[&/\\#,+()$~%.'":*?<>{}0-9]/g, "").toLowerCase();
   }
 
+  // map all the words from the recipes
   buildMapping() {
     this.app.recipesDB.forEach((recipe) => {
       recipe.name.split(" ").forEach((item) => {
@@ -38,6 +42,7 @@ export class Mapping {
     });
   }
 
+  // map all appliance
   applianceMapping(recipe) {
     this.appliance.add(this.standardize(recipe.appliance));
 
@@ -47,6 +52,7 @@ export class Mapping {
     });
   }
 
+  // map all ustensils
   ustensilsMApping(recipe) {
     recipe.ustensils.forEach((ustensil) => {
       this.ustensils.add(this.standardize(ustensil));
@@ -58,6 +64,7 @@ export class Mapping {
     });
   }
 
+  // map all ingredients
   ingredientsMApping(recipe) {
     recipe.ingredients.forEach(({ ingredient }) => {
       this.ingredients.add(this.standardize(ingredient));
