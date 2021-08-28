@@ -15,6 +15,7 @@ class App {
     this.ustensilsManager = new UstensilsManager(this);
     this.ingredientsManager = new IngredientsManager(this);
 
+    this.searchedWords = [];
     this.labels = [];
 
     this.init();
@@ -55,7 +56,7 @@ class App {
       keys = new Set([]);
     for (key in obj) {
       if (word.test(key)) {
-        keys.add(...obj[key]);
+        obj[key]?.forEach((key) => keys.add(key));
       }
     }
     return Array.from(keys);
@@ -68,8 +69,8 @@ class App {
       const targetValue = e.target.value;
       const words = targetValue?.trim()?.toLowerCase().split(" ");
 
-      const searchedWords = words.filter((word) => this.wordLength(word));
-      this.searchByMapping(searchedWords);
+      this.searchedWords = words.filter((word) => this.wordLength(word));
+      this.update();
     });
   }
 
@@ -173,9 +174,18 @@ class App {
   // update page by label and mapping for recipes
   update() {
     this.appendLabels();
-    this.searchByMapping([...this.applianceManager.labels]);
-    this.searchByMapping([...this.ustensilsManager.labels]);
-    this.searchByMapping([...this.ingredientsManager.labels]);
+
+    const allWords = [
+      ...this.applianceManager.labels,
+      ...this.ustensilsManager.labels,
+      ...this.ingredientsManager.labels,
+    ].reduce((acc, words) => {
+      const res = words.split(" ")?.filter((word) => this.wordLength(word));
+      acc.push(...res);
+      return acc;
+    }, []);
+
+    this.searchByMapping([...allWords, ...this.searchedWords]);
   }
 }
 

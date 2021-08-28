@@ -23,7 +23,6 @@ export class ItemsManager {
         const items = new Set([...obj.labels]);
         items.add(e.target.outerText.trim());
         obj.labels = Array.from(items);
-        // this.app.appendLabels();
         this.app.update();
       });
     });
