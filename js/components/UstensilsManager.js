@@ -5,7 +5,7 @@ export class UstensilsManager extends ItemsManager {
   // to build ustensils
   constructor(app) {
     super(app);
-    this.ustensils = Array.from(this.app.mapping.ustensils).sort();
+    this.ustensils = [];
     this.labels = [];
     this.color = "danger";
     this.type = "ustensils";
@@ -16,6 +16,7 @@ export class UstensilsManager extends ItemsManager {
 
   // constructor call
   init() {
+    this.ustensils = Array.from(this.app.mapping.ustensils).sort();
     this.appendUstensils(this.ustensils);
     this.searchEvent();
   }
@@ -41,5 +42,14 @@ export class UstensilsManager extends ItemsManager {
         this.appendUstensils(this.ustensils);
       }
     });
+  }
+
+  // reset ustensils in dropdown when filtered recipes is displayed
+  resetItemDropdown() {
+    this.app.mapping.ustensils = new Set();
+    this.app.recipes.forEach((recipe) => {
+      this.app.mapping.ustensilsMapping(recipe);
+    });
+    this.init();
   }
 }

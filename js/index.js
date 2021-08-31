@@ -184,8 +184,10 @@ class App {
       acc.push(...res);
       return acc;
     }, []);
-
     this.searchByMapping([...allWords, ...this.searchedWords]);
+    this.applianceManager.resetItemDropdown();
+    this.ustensilsManager.resetItemDropdown();
+    this.ingredientsManager.resetItemDropdown();
   }
 }
 

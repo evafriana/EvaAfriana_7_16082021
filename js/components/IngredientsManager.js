@@ -5,7 +5,7 @@ export class IngredientsManager extends ItemsManager {
   // to build ingredients
   constructor(app) {
     super(app);
-    this.ingredients = Array.from(this.app.mapping.ingredients).sort();
+    this.ingredients = [];
     this.labels = [];
     this.color = "primary";
     this.type = "ingredients";
@@ -13,8 +13,10 @@ export class IngredientsManager extends ItemsManager {
 
     this.init();
   }
+
   // constructor call
   init() {
+    this.ingredients = Array.from(this.app.mapping.ingredients).sort();
     this.appendIngredients(this.ingredients);
     this.searchEvent();
   }
@@ -40,5 +42,14 @@ export class IngredientsManager extends ItemsManager {
         this.appendIngredients(this.ingredients);
       }
     });
+  }
+
+  // reset ingredients in dropdown when filtered recipes is displayed
+  resetItemDropdown() {
+    this.app.mapping.ingredients = new Set();
+    this.app.recipes.forEach((recipe) => {
+      this.app.mapping.ingredientsMapping(recipe);
+    });
+    this.init();
   }
 }

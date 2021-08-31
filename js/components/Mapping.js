@@ -37,8 +37,8 @@ export class Mapping {
         this.addId(word, recipe.id, this.mapping);
       });
       this.applianceMapping(recipe);
-      this.ustensilsMApping(recipe);
-      this.ingredientsMApping(recipe);
+      this.ustensilsMapping(recipe);
+      this.ingredientsMapping(recipe);
     });
   }
 
@@ -53,7 +53,7 @@ export class Mapping {
   }
 
   // map all ustensils
-  ustensilsMApping(recipe) {
+  ustensilsMapping(recipe) {
     recipe.ustensils.forEach((ustensil) => {
       this.ustensils.add(this.standardize(ustensil));
 
@@ -65,7 +65,7 @@ export class Mapping {
   }
 
   // map all ingredients
-  ingredientsMApping(recipe) {
+  ingredientsMapping(recipe) {
     recipe.ingredients.forEach(({ ingredient }) => {
       this.ingredients.add(this.standardize(ingredient));
 

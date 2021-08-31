@@ -5,7 +5,7 @@ export class ApplianceManager extends ItemsManager {
   // to build appliance
   constructor(app) {
     super(app);
-    this.appliance = Array.from(this.app.mapping.appliance).sort();
+    this.appliance = [];
     this.labels = [];
     this.color = "success";
     this.type = "appliance";
@@ -16,6 +16,7 @@ export class ApplianceManager extends ItemsManager {
 
   // constructor call
   init() {
+    this.appliance = Array.from(this.app.mapping.appliance).sort();
     this.appendAppliance(this.appliance);
     this.searchEvent();
   }
@@ -41,5 +42,14 @@ export class ApplianceManager extends ItemsManager {
         this.appendAppliance(this.appliance);
       }
     });
+  }
+
+  // reset appliances in dropdown when filtered recipes is displayed
+  resetItemDropdown() {
+    this.app.mapping.appliance = new Set();
+    this.app.recipes.forEach((recipe) => {
+      this.app.mapping.applianceMapping(recipe);
+    });
+    this.init();
   }
 }
