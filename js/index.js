@@ -97,7 +97,7 @@ class App {
     searchInput.addEventListener("input", (e) => {
       const targetValue = e.target.value;
       const words = targetValue?.trim()?.toLowerCase().split(" ");
-
+      console.time("Function #1");
       if (words[0] === "") {
         this.searchedWords = [];
       } else {
@@ -142,6 +142,7 @@ class App {
     // append elements in page
     this.appendCardsRecipes();
     this.appendLabels();
+    console.timeEnd("Function #1");
   }
 
   searchEverywhere(word) {
