@@ -66,6 +66,7 @@ class App {
   searchEvent() {
     const searchInput = document.querySelector(".search__input");
     searchInput.addEventListener("input", (e) => {
+      console.time("Function #1");
       const targetValue = e.target.value;
       const words = targetValue?.trim()?.toLowerCase().split(" ");
 
@@ -188,6 +189,7 @@ class App {
     this.applianceManager.resetItemDropdown();
     this.ustensilsManager.resetItemDropdown();
     this.ingredientsManager.resetItemDropdown();
+    console.timeEnd("Function #1");
   }
 }
 
