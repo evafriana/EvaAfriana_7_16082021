@@ -176,7 +176,7 @@ class App {
   update() {
     this.appendLabels();
 
-    const allWords = [
+    const allLabels = [
       ...this.applianceManager.labels,
       ...this.ustensilsManager.labels,
       ...this.ingredientsManager.labels,
@@ -185,7 +185,7 @@ class App {
       acc.push(...res);
       return acc;
     }, []);
-    this.searchByMapping([...allWords, ...this.searchedWords]);
+    this.searchByMapping([...allLabels, ...this.searchedWords]);
     this.applianceManager.resetItemDropdown();
     this.ustensilsManager.resetItemDropdown();
     this.ingredientsManager.resetItemDropdown();
